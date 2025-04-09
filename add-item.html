@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Sell Your Waste Item</h2>
+<form id="wasteForm">
+  <input type="file" id="wasteImage" accept="image/*" required><br><br>
+  <input type="text" id="wasteName" placeholder="Waste Item Name" required><br><br>
+  <input type="number" id="wastePrice" placeholder="Expected Price (Rs)" required><br><br>
+  
+  <select id="wasteType" required>
+    <option value="">Select Waste Type</option>
+    <option value="plastic">Plastic</option>
+    <option value="paper">Paper</option>
+    <option value="metal">Metal</option>
+    <option value="furniture">Furniture</option>
+    <option value="electronic">Electronic</option>
+  </select><br><br>
+
+  <button type="submit">Post Item</button>
+</form>
+
+<hr>
+
+</body>
+</html>
