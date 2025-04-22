@@ -1,0 +1,29 @@
+<!-- role.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Role</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial; text-align: center; padding-top: 100px; }
+    button { padding: 12px 30px; font-size: 16px; margin: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>How would you like to use the site?</h2>
+  <button onclick="selectRole('seller')">I'm a Seller</button>
+  <button onclick="selectRole('buyer')">I'm a Buyer</button>
+
+  <script>
+    function selectRole(role) {
+      localStorage.setItem("userRole", role);
+      if (role === "seller") {
+        window.location.href = "add-item.html"; // Go to form first
+      } else {
+        window.location.href = "main.html"; // Directly to main feed
+      }
+    }
+  </script>
+</body>
+</html>

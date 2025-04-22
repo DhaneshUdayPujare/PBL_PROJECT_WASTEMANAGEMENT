@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #chatBox {
+      border: 1px solid #ccc;
+      height: 400px;
+      overflow-y: scroll;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    #messageInput {
+      width: 70%;
+    }
+    #sendBtn {
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<!-- chat.html -->
+<body>
+    <div id="chat-header">
+      <h2 id="chat-with">Chat with: </h2>
+    </div>
+  
+    <div id="chat-box" class="chat-box">
+      <!-- Messages will go here -->
+    </div>
+  
+    <form id="chat-form">
+      <input type="text" id="message-input" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </form>
+  
+    <script type="module" src="chat.js"></script>
+  </body>
+  
+</html>

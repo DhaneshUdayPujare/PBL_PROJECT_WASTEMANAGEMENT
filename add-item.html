@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell Item</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Sell Your Waste Item</h2>
+<form id="addItemForm">
+  <input type="text" id="sellerName" placeholder="Your Name (visible on post)" required><br><br>
+  <input type="tel" id="phoneNumber" placeholder="Phone Number (with country code, e.g. +91...)" required><br><br>
+
+  <input type="file" id="wasteImage" accept="image/*" required><br><br>
+  <input type="text" id="wasteName" placeholder="Waste Item Name" required><br><br>
+  <input type="number" id="wastePrice" placeholder="Expected Price (Rs)" required><br><br>
+
+  <select id="wasteType" required>
+    <option value="">Select Waste Type</option>
+    <option value="plastic">Plastic</option>
+    <option value="paper">Paper</option>
+    <option value="metal">Metal</option>
+    <option value="furniture">Furniture</option>
+    <option value="electronic">Electronic</option>
+  </select><br><br>
+
+  <button type="submit">Post Item</button>
+</form>
+
+
+  <script type="module" src="firebase-config.js"></script>
+  
+  <script type="module" src="script.js"></script>
+  <script type="module" src="add-item.js"></script>
+</body>
+</html>
