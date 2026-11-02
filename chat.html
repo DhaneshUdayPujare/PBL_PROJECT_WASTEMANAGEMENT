@@ -5,41 +5,89 @@
   <title>Chat</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    .chat-container {
+      max-width: 500px;
+      margin: 1.5rem auto;
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    #chatBox {
-      border: 1px solid #ccc;
-      height: 400px;
-      overflow-y: scroll;
-      padding: 10px;
-      margin-bottom: 10px;
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: #7b1fa2;
+      text-decoration: none;
+      font-weight: bold;
     }
-    #messageInput {
-      width: 70%;
+    #chat-box {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      height: 350px;
+      overflow-y: auto;
+      padding: 12px;
+      margin-bottom: 1rem;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    #sendBtn {
-      padding: 5px 10px;
+    .msg {
+      max-width: 75%;
+      padding: 8px 14px;
+      border-radius: 12px;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .msg.sent {
+      align-self: flex-end;
+      background-color: #7b1fa2;
+      color: white;
+      border-bottom-right-radius: 2px;
+    }
+    .msg.received {
+      align-self: flex-start;
+      background-color: #e0f2f1;
+      color: #004d40;
+      border-bottom-left-radius: 2px;
+    }
+    #chat-form {
+      display: flex;
+      gap: 8px;
+      padding: 0;
+      width: 100%;
+      box-shadow: none;
+      margin: 0;
+    }
+    #message-input {
+      flex: 1;
+      margin-top: 0;
+    }
+    #send-btn {
+      width: auto;
+      margin-top: 0;
+      padding: 0.75rem 1.5rem;
     }
   </style>
 </head>
-<!-- chat.html -->
 <body>
+  <div class="chat-container">
+    <a href="main.html" class="back-link">← Back to Feed</a>
     <div id="chat-header">
-      <h2 id="chat-with">Chat with: </h2>
+      <h2 id="chat-with" style="margin-top: 0;">Chat</h2>
     </div>
-  
+
     <div id="chat-box" class="chat-box">
-      <!-- Messages will go here -->
+      <!-- Messages will appear here -->
     </div>
-  
+
     <form id="chat-form">
       <input type="text" id="message-input" placeholder="Type your message..." required />
-      <button type="submit">Send</button>
+      <button type="submit" id="send-btn">Send</button>
     </form>
-  
-    <script type="module" src="chat.js"></script>
-  </body>
-  
+  </div>
+
+  <script type="module" src="chat.js"></script>
+</body>
 </html>

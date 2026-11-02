@@ -9,25 +9,45 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-// 1. Get sellerId from URL
+// 1. Get sellerId and sellerName from URL query params
 const urlParams = new URLSearchParams(window.location.search);
 const sellerId = urlParams.get("sellerId");
+const sellerName = urlParams.get("sellerName");
 
-let currentUser;
+const chatWithHeader = document.getElementById("chat-with");
+if (chatWithHeader) {
+  if (sellerName) {
+    chatWithHeader.textContent = "Chat with: " + sellerName;
+  } else if (sellerId) {
+    chatWithHeader.textContent = "Chat with: " + sellerId;
+  } else {
+    chatWithHeader.textContent = "Chat (No seller selected)";
+  }
+}
+
+let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user;
-    listenToMessages();
+    if (sellerId) {
+      listenToMessages();
+    } else {
+      const chatBox = document.getElementById("chat-box");
+      if (chatBox) {
+        chatBox.innerHTML = "<p style='color: grey; text-align: center; margin-top: 50px;'>Select an item from the feed and click 'In-App Chat' to message the seller.</p>";
+      }
+    }
   } else {
     alert("Please login first.");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }
 });
 
 // 2. Listen to messages between currentUser and seller
 function listenToMessages() {
   const chatBox = document.getElementById("chat-box");
+  if (!chatBox) return;
 
   const q = query(
     collection(db, "messages"),
@@ -57,22 +77,38 @@ function listenToMessages() {
 }
 
 // 3. Send new message
-document.getElementById("send-btn").addEventListener("click", async () => {
-  const input = document.getElementById("msg-input");
-  const text = input.value.trim();
-  if (text === "") return;
+const chatForm = document.getElementById("chat-form");
+if (chatForm) {
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  try {
-    await addDoc(collection(db, "messages"), {
-      senderId: currentUser.uid,
-      receiverId: sellerId,
-      text: text,
-      timestamp: serverTimestamp()
-    });
+    if (!sellerId) {
+      alert("No seller selected. Please go to the feed and click Chat on an item.");
+      return;
+    }
 
-    input.value = "";
-  } catch (error) {
-    console.error("Failed to send message:", error);
-    alert("Message failed.");
-  }
-});
+    if (!currentUser) {
+      alert("Please login first.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    const input = document.getElementById("message-input");
+    const text = input.value.trim();
+    if (text === "") return;
+
+    try {
+      await addDoc(collection(db, "messages"), {
+        senderId: currentUser.uid,
+        receiverId: sellerId,
+        text: text,
+        timestamp: serverTimestamp()
+      });
+
+      input.value = "";
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      alert("Failed to send message: " + error.message);
+    }
+  });
+}

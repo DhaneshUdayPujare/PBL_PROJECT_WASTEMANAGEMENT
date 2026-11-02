@@ -67,6 +67,7 @@
       text-decoration: none;
       color: #333;
       font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -74,29 +75,14 @@
   <h2>Waste Marketplace Feed</h2>
 
   <div class="post-feed">
-    <!-- Sample post -->
-    <div class="post-card">
-      <img src="https://via.placeholder.com/400x250" alt="Waste Image">
-      <h3>Old Plastic Bottles</h3>
-      <p>Price: ₹50</p>
-      <p>Type: Plastic</p>
-      <button class="message-btn">Message Seller</button>
-    </div>
-
-    <div class="post-card">
-      <img src="https://via.placeholder.com/400x250" alt="Waste Image">
-      <h3>Old Newspapers</h3>
-      <p>Price: ₹30</p>
-      <p>Type: Paper</p>
-      <button class="message-btn">Message Seller</button>
-    </div>
+    <p style="text-align: center; color: #666;">Loading items...</p>
   </div>
 
   <div class="bottom-nav">
-    <a href="#">🏠 Home</a>
-    <a href="#">➕ Post</a>
-    <a href="#">📩 Messages</a>
-    <a href="#">👤 Profile</a>
+    <a href="main.html">🏠 Home</a>
+    <a href="add-item.html">➕ Post</a>
+    <a href="chat.html">📩 Messages</a>
+    <a href="#" id="logout-btn">🚪 Logout</a>
   </div>
 
   <script type="module" src="script.js"></script>

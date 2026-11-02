@@ -1,7 +1,8 @@
 import { auth, db } from "./firebase-config.js";
 import {
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 import {
@@ -49,6 +50,20 @@ if (loginForm) {
     });
 }
 
+// ✅ Logout
+const logoutBtn = document.getElementById("logout-btn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        signOut(auth).then(() => {
+            alert("Logged out successfully!");
+            window.location.href = "index.html";
+        }).catch((err) => {
+            alert("Logout error: " + err.message);
+        });
+    });
+}
+
 // ✅ Load posts on main.html with hide-message-on-own-post logic
 if (window.location.pathname.includes("main.html")) {
   const feedContainer = document.querySelector(".post-feed");
@@ -61,42 +76,57 @@ if (window.location.pathname.includes("main.html")) {
     }
 
     const currentUserId = user.uid;
-    const q = query(collection(db, "items"), orderBy("timestamp", "desc"));
-    const snapshot = await getDocs(q);
 
-    feedContainer.innerHTML = "";
+    try {
+      const q = query(collection(db, "items"), orderBy("timestamp", "desc"));
+      const snapshot = await getDocs(q);
 
-    snapshot.forEach((doc) => {
-      const item = doc.data();
-      const sellerId = item.sellerId || "unknown";
-      const sellerName = item.sellerName || "Seller";
-      const phoneNumber = item.phoneNumber || "";
+      feedContainer.innerHTML = "";
 
-      const card = document.createElement("div");
-      card.className = "post-card";
-
-      let postHTML = `
-        <h4>${sellerName}</h4>
-        <img src="${item.imageUrl}" alt="Waste Image">
-        <h3>${item.name}</h3>
-        <p>Price: ₹${item.price}</p>
-        <p>Type: ${item.type}</p>
-      `;
-
-      if (sellerId !== currentUserId) {
-        if (phoneNumber && phoneNumber.startsWith("+")) {
-          postHTML += `
-            <a href="https://wa.me/${phoneNumber.replace(/\+/g, '')}" target="_blank">
-              <button class="message-btn">Message Seller</button>
-            </a>
-          `;
-        } else {
-          postHTML += `<p style="color: grey; font-size: 12px;">WhatsApp contact not available</p>`;
-        }
+      if (snapshot.empty) {
+        feedContainer.innerHTML = "<p style='color: grey; text-align: center; margin: 2rem;'>No waste items listed yet. Be the first to post!</p>";
+        return;
       }
 
-      card.innerHTML = postHTML;
-      feedContainer.appendChild(card);
-    });
+      snapshot.forEach((doc) => {
+        const item = doc.data();
+        const sellerId = item.sellerId || "unknown";
+        const sellerName = item.sellerName || "Seller";
+        const phoneNumber = item.phoneNumber || "";
+
+        const card = document.createElement("div");
+        card.className = "post-card";
+
+        let postHTML = `
+          <h4>${sellerName}</h4>
+          ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.name || 'Waste Image'}" onerror="this.style.display='none'">` : ''}
+          <h3>${item.name || 'Unnamed Item'}</h3>
+          <p>Price: ₹${item.price || '0'}</p>
+          <p>Type: ${item.type || 'General'}</p>
+        `;
+
+        if (sellerId !== currentUserId) {
+          postHTML += `<div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">`;
+          if (phoneNumber && phoneNumber.startsWith("+")) {
+            postHTML += `
+              <a href="https://wa.me/${phoneNumber.replace(/\+/g, '')}" target="_blank">
+                <button class="message-btn" style="margin: 4px;">WhatsApp</button>
+              </a>
+            `;
+          }
+          postHTML += `
+            <a href="chat.html?sellerId=${sellerId}&sellerName=${encodeURIComponent(sellerName)}">
+              <button class="message-btn" style="background: #7b1fa2; margin: 4px;">In-App Chat</button>
+            </a>
+          </div>`;
+        }
+
+        card.innerHTML = postHTML;
+        feedContainer.appendChild(card);
+      });
+    } catch (error) {
+      console.error("Error loading feed:", error);
+      feedContainer.innerHTML = "<p style='color: red; text-align: center;'>Failed to load items. Please try refreshing.</p>";
+    }
   });
 }

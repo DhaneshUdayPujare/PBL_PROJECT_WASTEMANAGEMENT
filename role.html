@@ -12,18 +12,28 @@
 </head>
 <body>
   <h2>How would you like to use the site?</h2>
-  <button onclick="selectRole('seller')">I'm a Seller</button>
-  <button onclick="selectRole('buyer')">I'm a Buyer</button>
+  <button id="seller-btn">I'm a Seller</button>
+  <button id="buyer-btn">I'm a Buyer</button>
 
-  <script>
-    function selectRole(role) {
-      localStorage.setItem("userRole", role);
-      if (role === "seller") {
-        window.location.href = "add-item.html"; // Go to form first
-      } else {
-        window.location.href = "main.html"; // Directly to main feed
+  <script type="module">
+    import { auth } from "./firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
       }
-    }
+    });
+
+    document.getElementById("seller-btn").addEventListener("click", () => {
+      localStorage.setItem("userRole", "seller");
+      window.location.href = "add-item.html";
+    });
+
+    document.getElementById("buyer-btn").addEventListener("click", () => {
+      localStorage.setItem("userRole", "buyer");
+      window.location.href = "main.html";
+    });
   </script>
 </body>
 </html>
